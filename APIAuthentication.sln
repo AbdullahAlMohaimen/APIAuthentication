@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIAuthentication", "APIAuthentication\APIAuthentication.csproj", "{BBF22C02-3EAE-446F-BCDB-384CA0074457}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBF22C02-3EAE-446F-BCDB-384CA0074457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF22C02-3EAE-446F-BCDB-384CA0074457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF22C02-3EAE-446F-BCDB-384CA0074457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF22C02-3EAE-446F-BCDB-384CA0074457}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA7B0C0A-740B-4166-B941-96CC4DB3EED2}
+	EndGlobalSection
+EndGlobal
