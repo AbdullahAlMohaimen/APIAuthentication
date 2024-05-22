@@ -11,6 +11,10 @@ namespace APIAuthentication.Service
 	public class AuthenticationService
 	{
 		private readonly IConfiguration _configuration;
+		public AuthenticationService()
+		{
+
+		}
 		public AuthenticationService(IConfiguration configuration)
 		{
 			_configuration = configuration;

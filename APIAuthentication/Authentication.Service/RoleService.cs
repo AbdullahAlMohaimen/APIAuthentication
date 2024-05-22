@@ -58,11 +58,15 @@ namespace APIAuthentication.Service
 			List<Role> oRole = new List<Role>();
 			DataTable roleDatatable = new DataTable();
 			MethodInfo oMethodInfo = typeof(RoleService).GetMethod(oMethodInvocation.MethodName);
+
+			#region Check Method is available or not
 			if (oMethodInfo == null)
 			{
-				throw new ArgumentException($"Method '{oMethodInvocation.MethodName}' not found in RoleService");
+				throw new ArgumentException($"Method '{oMethodInvocation.MethodName}' not found");
 			}
+			#endregion
 
+			#region Method Parameters Check
 			if (oMethodInvocation.Parameters != null)
 			{
 				if (oMethodInfo.GetParameters().Length != oMethodInvocation.Parameters.Length)
@@ -70,13 +74,18 @@ namespace APIAuthentication.Service
 					throw new ArgumentException($"Number of parameters provided does not match the method signature of '{oMethodInvocation.MethodName}'");
 				}
 			}
+			#endregion
+
+			#region Method Call
 			var result = oMethodInfo.Invoke(oMethodInvocation.ServiceInstance, oMethodInvocation.Parameters);
 			oRole = (List<Role>)result;
+			#endregion
 
-			if(oRole.Count > 0)
-			{
+			#region Convert into custom Datatable
+			if (oRole.Count > 0)
 				roleDatatable = GetRoleDataTable(oRole);
-			}
+			#endregion
+
 			return roleDatatable;
 		}
 
@@ -105,7 +114,7 @@ namespace APIAuthentication.Service
 		#endregion
 
 		#region  GetAllRoleByStatus()
-		public List<Role> GetRole(EnumStatus status)
+		public List<Role> GetAllRoleByStatus(EnumStatus status)
 		{
 			List<Role> roles = new List<Role>();
 			TransactionContext tc = new TransactionContext();
@@ -120,14 +129,14 @@ namespace APIAuthentication.Service
 			catch (Exception ex)
 			{
 				tc.Rollback();
-				throw new Exception("An error occurred while getting all roles: " + ex.Message);
+				throw new Exception("An error occurred while getting roles by status : " + ex.Message);
 			}
 			return roles;
 		}
 		#endregion
 
 		#region  GetRoleByID()
-		public Role GetRoleByID(int ID)
+		public Role Get(int ID)
 		{
 			Role oRole = new Role();
 			TransactionContext tc = new TransactionContext();
@@ -151,7 +160,7 @@ namespace APIAuthentication.Service
 		#endregion
 
 		#region  GetRoleByCode()
-		public Role GetRoleByCode(string code)
+		public Role Get(string code)
 		{
 			Role oRole = new Role();
 			TransactionContext tc = new TransactionContext();

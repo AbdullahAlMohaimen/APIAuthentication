@@ -62,6 +62,21 @@
 	}
 	#endregion
 
+	#region ServiceInstance
+	public enum EnumServiceInstance
+	{
+		AuthenticationService = 1,
+		RoleService = 2,
+		EmployeeService = 3,
+		UserService = 4,
+		LoginInfoService = 5,
+		EmployeePasswordHistoryService = 6,
+		UserPasswordHistoryService = 7,
+		PasswordResetHistoryService = 8,
+		BadLoginAttemptInfoService = 9,
+	}
+	#endregion
+
 	public enum ColumnDataTypeEnum : byte
 	{
 		Fixed = 0,
