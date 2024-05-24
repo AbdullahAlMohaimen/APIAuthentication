@@ -11,10 +11,12 @@ namespace APIAuthentication
 			MethodName = methodName;
 			ServiceInstance = CreateServiceInstances(instance);
 			Parameters = parameters;
+			ParameterTypes = parameters != null ? Array.ConvertAll(parameters, param => param.GetType()) : Type.EmptyTypes;
 		}
 		public string MethodName { get; set; }
 		public object ServiceInstance { get; set; }
 		public object[] Parameters { get; set; }
+		public Type[] ParameterTypes { get; set; }
 
 		private object CreateServiceInstances(EnumServiceInstance instance)
 		{

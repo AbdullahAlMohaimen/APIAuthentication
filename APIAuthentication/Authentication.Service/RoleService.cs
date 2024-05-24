@@ -57,7 +57,7 @@ namespace APIAuthentication.Service
 		{
 			List<Role> oRole = new List<Role>();
 			DataTable roleDatatable = new DataTable();
-			MethodInfo oMethodInfo = typeof(RoleService).GetMethod(oMethodInvocation.MethodName);
+			MethodInfo oMethodInfo = typeof(RoleService).GetMethod(oMethodInvocation.MethodName, oMethodInvocation.ParameterTypes);
 
 			#region Check Method is available or not
 			if (oMethodInfo == null)
@@ -78,7 +78,14 @@ namespace APIAuthentication.Service
 
 			#region Method Call
 			var result = oMethodInfo.Invoke(oMethodInvocation.ServiceInstance, oMethodInvocation.Parameters);
-			oRole = (List<Role>)result;
+			if (result is List<Role>)
+			{
+				oRole = (List<Role>)result;
+			}
+			else if (result is Role)
+			{
+				oRole = new List<Role> { (Role)result };
+			}
 			#endregion
 
 			#region Convert into custom Datatable
@@ -148,6 +155,7 @@ namespace APIAuthentication.Service
 				{
 					oRole = this.CreateObject<Role>(oreader);
 				}
+				oreader.Close();
 				tc.End();
 			}
 			catch (Exception ex)
@@ -172,6 +180,7 @@ namespace APIAuthentication.Service
 				{
 					oRole = this.CreateObject<Role>(oreader);
 				}
+				oreader.Close();
 				tc.End();
 			}
 			catch (Exception ex)
