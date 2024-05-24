@@ -95,7 +95,6 @@ namespace APIAuthentication.Service
 
 			return roleDatatable;
 		}
-
 		#endregion
 
 		#region  GetAllRole()

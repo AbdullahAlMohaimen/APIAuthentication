@@ -11,6 +11,9 @@ using System.Data.SqlClient;
 using APIAuthentication.BO;
 using APIAuthentication.Global;
 using APIAuthentication.Authentication.DA;
+using System.Reflection;
+using System.Collections;
+using ClosedXML;
 
 namespace APIAuthentication.Service
 {
@@ -62,6 +65,51 @@ namespace APIAuthentication.Service
 			Users oUser = new Users();
 			MapObject(oUser, oReader);
 			return oUser;
+		}
+		#endregion
+
+		#region RoleWithReflection
+		public object RoleWithReflection(MethodInvocation oMethodInvocation)
+		{
+			List<Users> oUsers = new List<Users>();
+			DataTable userDatatable = new DataTable();
+			MethodInfo oMethodInfo = typeof(UserService).GetMethod(oMethodInvocation.MethodName, oMethodInvocation.ParameterTypes);
+
+			#region Check Method is available or not
+			if (oMethodInfo == null)
+			{
+				throw new ArgumentException($"Method '{oMethodInvocation.MethodName}' not found");
+			}
+			#endregion
+
+			#region Method Parameters Check
+			if (oMethodInvocation.Parameters != null)
+			{
+				if (oMethodInfo.GetParameters().Length != oMethodInvocation.Parameters.Length)
+				{
+					throw new ArgumentException($"Number of parameters provided does not match the method signature of '{oMethodInvocation.MethodName}'");
+				}
+			}
+			#endregion
+
+			#region Method Call
+			var result = oMethodInfo.Invoke(oMethodInvocation.ServiceInstance, oMethodInvocation.Parameters);
+			if (result is List<Users>)
+			{
+				oUsers = (List<Users>)result;
+			}
+			else if (result is Users)
+			{
+				oUsers = new List<Users> { (Users)result };
+			}
+			#endregion
+
+			#region Convert into custom Datatable
+			if (oUsers.Count > 0)
+				userDatatable = GetUserDataTable(oUsers);
+			#endregion
+
+			return userDatatable;
 		}
 		#endregion
 
