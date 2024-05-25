@@ -69,7 +69,7 @@ namespace APIAuthentication.Service
 		#endregion
 
 		#region RoleWithReflection
-		public object RoleWithReflection(MethodInvocation oMethodInvocation)
+		public object DataWithReflection(MethodInvocation oMethodInvocation)
 		{
 			List<Users> oUsers = new List<Users>();
 			DataTable userDatatable = new DataTable();
@@ -114,10 +114,8 @@ namespace APIAuthentication.Service
 		#endregion
 
 		#region  GetUserbyID()
-		public DataTable GetUser(int userID)
+		public Users GetUser(int userID)
 		{
-			DataTable userDataTable = new DataTable();
-			List<Users> users = new List<Users>();
 			Users oUser = new Users();
 			TransactionContext tc = new TransactionContext();
 			try
@@ -128,26 +126,27 @@ namespace APIAuthentication.Service
 				{
 					oUser = this.CreateObject<Users>(oreader);
 				}
+				oreader.Close();
 				tc.End();
-
-				if (oUser != null)
-				{
-					users.Add(oUser);
-				}
-				userDataTable = GetUserDataTable(users);
 			}
 			catch (Exception ex)
 			{
 				tc.Rollback();
 				throw new Exception("An error occurred while getting User by ID: " + ex.Message);
 			}
-			return userDataTable;
+			return oUser;
 		}
 		#endregion
 
 		#region User DataTable Generate
 		public DataTable GetUserDataTable(List<Users> allUsers)
 		{
+			//string stackTrace = Environment.StackTrace;
+			//string[] stackLines = stackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+			//string callerMethod = stackLines.Length > 2 ? stackLines[2] : "Unknown";
+			//string callerMethodName = GetMethodName(callerMethod);
+			CallingMethodInformation oMethodInformation = new CallingMethodInformation(Environment.StackTrace);
+
 			DataRow oDR = null;
 			DataTable roleDataTable = new DataTable();
 			roleDataTable.Columns.Add("User Name", typeof(string));
@@ -163,13 +162,23 @@ namespace APIAuthentication.Service
 				oDR["User No"] = oUser.UserNo;
 				oDR["Status"] = GlobalFunction.GetEnumName(oUser.Status);
 				oDR["Role"] = "";
-				oDR["Is Approver"] = GlobalFunction.ReturnYesOrNo(oUser.IsApprover); ;
+				oDR["Is Approver"] = GlobalFunction.ReturnYesOrNo(oUser.IsApprover);
 
 				roleDataTable.Rows.Add(oDR);
 			}
-			roleDataTable.TableName = "Role";
+			roleDataTable.TableName = "Users";
 			return roleDataTable;
 		}
 		#endregion
+
+		private string GetMethodName(string stackTraceLine)
+		{
+			string[] parts = stackTraceLine.Trim().Split(new[] { '.' }, 4);
+			if (parts.Length > 3)
+			{
+				return parts[3].Split(new[] { '(' }, 2)[0];
+			}
+			return "Unknown";
+		}
 	}
 }

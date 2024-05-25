@@ -34,7 +34,7 @@ namespace APIAuthentication.Controller
 			{
 				object[] parameters = null;
 				MethodInvocation oMethodInvocation = new MethodInvocation("GetAllRole", EnumServiceInstance.RoleService, parameters);
-				roleDataTable = (DataTable) new RoleService().RoleWithReflection(oMethodInvocation);
+				roleDataTable = (DataTable) new RoleService().DataWithReflection(oMethodInvocation);
 				json = JsonConvert.SerializeObject(roleDataTable);
 			}
 			catch (Exception e)
@@ -55,7 +55,7 @@ namespace APIAuthentication.Controller
 			{
 				object[] parameters = new object[] { status };
 				MethodInvocation oMethodInvocation = new MethodInvocation("GetAllRoleByStatus", EnumServiceInstance.RoleService, parameters);
-				roleDataTable = (DataTable)new RoleService().RoleWithReflection(oMethodInvocation);
+				roleDataTable = (DataTable)new RoleService().DataWithReflection(oMethodInvocation);
 				json = JsonConvert.SerializeObject(roleDataTable);
 			}
 			catch (Exception e)
@@ -76,7 +76,7 @@ namespace APIAuthentication.Controller
 			{
 				object[] parameters = new object[] { ID };
 				MethodInvocation oMethodInvocation = new MethodInvocation("Get", EnumServiceInstance.RoleService, parameters);
-				roleDataTable = (DataTable)new RoleService().RoleWithReflection(oMethodInvocation);
+				roleDataTable = (DataTable)new RoleService().DataWithReflection(oMethodInvocation);
 				json = JsonConvert.SerializeObject(roleDataTable);
 			}
 			catch (Exception e)
@@ -97,7 +97,7 @@ namespace APIAuthentication.Controller
 			{
 				object[] parameters = new object[] { Code };
 				MethodInvocation oMethodInvocation = new MethodInvocation("Get", EnumServiceInstance.RoleService, parameters);
-				roleDataTable = (DataTable)new RoleService().RoleWithReflection(oMethodInvocation);
+				roleDataTable = (DataTable)new RoleService().DataWithReflection(oMethodInvocation);
 				json = JsonConvert.SerializeObject(roleDataTable);
 			}
 			catch (Exception e)

@@ -15,6 +15,7 @@ namespace APIAuthentication
 		}
 		public void Begin()
 		{
+			_connection.Close();
 			_connection.Open();
 			_transaction = _connection.BeginTransaction();
 		}

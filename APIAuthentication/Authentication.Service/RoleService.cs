@@ -53,7 +53,7 @@ namespace APIAuthentication.Service
 
 
 		#region RoleWithReflection
-		public object RoleWithReflection(MethodInvocation oMethodInvocation)
+		public object DataWithReflection(MethodInvocation oMethodInvocation)
 		{
 			List<Role> oRole = new List<Role>();
 			DataTable roleDatatable = new DataTable();
