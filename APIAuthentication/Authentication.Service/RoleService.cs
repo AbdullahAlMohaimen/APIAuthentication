@@ -166,6 +166,28 @@ namespace APIAuthentication.Service
 		}
 		#endregion
 
+		#region  GetRoleByIDWithTransection()
+		public Role Get(TransactionContext tc, int ID)
+		{
+			Role oRole = new Role();
+			try
+			{
+				DataReader oreader = new DataReader(RoleDA.GetRoleByID(tc, ID));
+				if (oreader.Read())
+				{
+					oRole = this.CreateObject<Role>(oreader);
+				}
+				oreader.Close();
+			}
+			catch (Exception ex)
+			{
+				tc.Rollback();
+				throw new Exception("An error occurred while getting Role by ID: " + ex.Message);
+			}
+			return oRole;
+		}
+		#endregion
+
 		#region  GetRoleByCode()
 		public Role Get(string code)
 		{

@@ -24,8 +24,6 @@ namespace APIAuthentication.Controller
 		#region Users Endpoint
 
 		#region GetUsersByID
-
-		#endregion
 		[HttpGet("GetUser/{ID}")]
 		public IActionResult GetUser(int ID)
 		{
@@ -34,16 +32,18 @@ namespace APIAuthentication.Controller
 			try
 			{
 				object[] parameters = new object[] { ID };
-				MethodInvocation oMethodInvocation = new MethodInvocation("GetUser", EnumServiceInstance.UserService, parameters);
+				MethodInvocation oMethodInvocation = new MethodInvocation("Get", EnumServiceInstance.UserService, parameters);
 				usersDataTable = (DataTable)new UserService().DataWithReflection(oMethodInvocation);
 				json = JsonConvert.SerializeObject(usersDataTable);
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(500 , new { message = ex.Message});
+				return StatusCode(500, new { message = ex.Message });
 			}
 			return Content(json, "application/json");
 		}
+		#endregion
+
 		#endregion
 	}
 }

@@ -32,7 +32,7 @@ namespace APIAuthentication
 		#endregion
 
 		#region  GetUserByUserNo
-		internal static IDataReader GetUserByUserNo(TransactionContext tc, string userNo)
+		internal static IDataReader Get(TransactionContext tc, string userNo)
 		{
 			SqlDataReader dr = null;
 			SqlCommand getCommand = null;

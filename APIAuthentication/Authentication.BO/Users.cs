@@ -259,6 +259,8 @@ namespace APIAuthentication.BO
 		}
 		#endregion
 
+		public Role Role { get; set; }
+
 		#endregion
 	}
 	#endregion

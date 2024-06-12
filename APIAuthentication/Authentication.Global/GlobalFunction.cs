@@ -1167,7 +1167,6 @@ namespace APIAuthentication
 				image.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);
 			}
 		}
-
 		public static byte[] ConvertDocToPdf(byte[] docData)
 		{
 			using (MemoryStream docStream = new MemoryStream(docData))
@@ -1324,7 +1323,6 @@ namespace APIAuthentication
 				}
 			}
 		}
-
 		public Attachment ConvertDocToDocX(Attachment externalItem)
 		{
 			string[] items = externalItem.File.Split(new char[] { ',', ' ' }, StringSplitOptions.None);

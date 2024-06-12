@@ -114,9 +114,9 @@ namespace APIAuthentication.Service
 		#endregion
 
 		#region  GetUserbyID()
-		public Users GetUser(int userID)
+		public Users Get(int userID)
 		{
-			Users oUser = new Users();
+			Users oUser = null;
 			TransactionContext tc = new TransactionContext();
 			try
 			{
@@ -127,6 +127,11 @@ namespace APIAuthentication.Service
 					oUser = this.CreateObject<Users>(oreader);
 				}
 				oreader.Close();
+
+				if (oUser != null)
+				{
+					oUser.Role = new RoleService().Get(tc, oUser.RoleID);
+				}
 				tc.End();
 			}
 			catch (Exception ex)
@@ -138,13 +143,68 @@ namespace APIAuthentication.Service
 		}
 		#endregion
 
+		#region  GetUserbyUserNo()
+		public Users Get(string userNo)
+		{
+			Users oUser = null;
+			TransactionContext tc = new TransactionContext();
+			try
+			{
+				tc.Begin();
+				DataReader oreader = new DataReader(UsersDA.Get(tc, userNo));
+				if (oreader.Read())
+				{
+					oUser = this.CreateObject<Users>(oreader);
+				}
+				oreader.Close();
+
+				if (oUser != null)
+				{
+					oUser.Role = new RoleService().Get(tc, oUser.RoleID);
+				}
+				tc.End();
+			}
+			catch (Exception ex)
+			{
+				tc.Rollback();
+				throw new Exception("An error occurred while getting User by ID: " + ex.Message);
+			}
+			return oUser;
+		}
+		#endregion
+
+		#region  GetUserbyUserName()
+		public Users GetUserByUserName(string userNo)
+		{
+			Users oUser = null;
+			TransactionContext tc = new TransactionContext();
+			try
+			{
+				tc.Begin();
+				DataReader oreader = new DataReader(UsersDA.Get(tc, userNo));
+				if (oreader.Read())
+				{
+					oUser = this.CreateObject<Users>(oreader);
+				}
+				oreader.Close();
+
+				if (oUser != null)
+				{
+					oUser.Role = new RoleService().Get(tc, oUser.RoleID);
+				}
+				tc.End();
+			}
+			catch (Exception ex)
+			{
+				tc.Rollback();
+				throw new Exception("An error occurred while getting User by ID: " + ex.Message);
+			}
+			return oUser;
+		}
+		#endregion
 		#region User DataTable Generate
 		public DataTable GetUserDataTable(List<Users> allUsers)
 		{
-			//string stackTrace = Environment.StackTrace;
-			//string[] stackLines = stackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-			//string callerMethod = stackLines.Length > 2 ? stackLines[2] : "Unknown";
-			//string callerMethodName = GetMethodName(callerMethod);
 			CallingMethodInformation oMethodInformation = new CallingMethodInformation(Environment.StackTrace);
 
 			DataRow oDR = null;
@@ -152,7 +212,9 @@ namespace APIAuthentication.Service
 			roleDataTable.Columns.Add("User Name", typeof(string));
 			roleDataTable.Columns.Add("User No", typeof(string));
 			roleDataTable.Columns.Add("Status", typeof(string));
+			roleDataTable.Columns.Add("Email", typeof(string));
 			roleDataTable.Columns.Add("Role", typeof(string));
+			roleDataTable.Columns.Add("Last Password Changed Date", typeof(string));
 			roleDataTable.Columns.Add("Is Approver", typeof(string));
 
 			foreach (Users oUser in allUsers)
@@ -161,7 +223,9 @@ namespace APIAuthentication.Service
 				oDR["User Name"] = oUser.UserName;
 				oDR["User No"] = oUser.UserNo;
 				oDR["Status"] = GlobalFunction.GetEnumName(oUser.Status);
-				oDR["Role"] = "";
+				oDR["Email"] = oUser.Email;
+				oDR["Role"] = oUser.Role == null ? "" : oUser.Role.Name;
+				oDR["Last Password Changed Date"] = oUser.LastChangeDate != DateTime.MinValue ? oUser.LastChangeDate.ToString("yyyy-MM-dd") : "";
 				oDR["Is Approver"] = GlobalFunction.ReturnYesOrNo(oUser.IsApprover);
 
 				roleDataTable.Rows.Add(oDR);
@@ -170,15 +234,5 @@ namespace APIAuthentication.Service
 			return roleDataTable;
 		}
 		#endregion
-
-		private string GetMethodName(string stackTraceLine)
-		{
-			string[] parts = stackTraceLine.Trim().Split(new[] { '.' }, 4);
-			if (parts.Length > 3)
-			{
-				return parts[3].Split(new[] { '(' }, 2)[0];
-			}
-			return "Unknown";
-		}
 	}
 }
